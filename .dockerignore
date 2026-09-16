@@ -1,6 +1,7 @@
 .git
 .env
 QtScrcpy-win-x64-v3.7.0
+.vendor-ws-scrcpy-web
 prd.md
 README.md
 .gocache

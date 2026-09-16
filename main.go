@@ -39,7 +39,7 @@ func main() {
 	mux.HandleFunc("GET /", serveIndex)
 
 	addr := env("LISTEN_ADDR", ":8080")
-	server := &http.Server{Addr: addr, Handler: requestLog(auth(mux)), ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 20 * time.Second, WriteTimeout: 20 * time.Second, IdleTimeout: 60 * time.Second}
+	server := &http.Server{Addr: addr, Handler: requestLog(mux), ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 20 * time.Second, WriteTimeout: 20 * time.Second, IdleTimeout: 60 * time.Second}
 	log.Printf("master-stb monitor listening on %s", addr)
 	log.Fatal(server.ListenAndServe())
 }
@@ -121,18 +121,6 @@ func serveIndex(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	_, _ = w.Write(b)
-}
-
-func auth(next http.Handler) http.Handler {
-	token := os.Getenv("DASHBOARD_TOKEN")
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		publicPage := r.Method == http.MethodGet && r.URL.Path == "/"
-		if token != "" && r.URL.Path != "/health" && !publicPage && r.Header.Get("X-Dashboard-Token") != token {
-			writeError(w, http.StatusUnauthorized, "token diperlukan")
-			return
-		}
-		next.ServeHTTP(w, r)
-	})
 }
 
 func requestLog(next http.Handler) http.Handler {

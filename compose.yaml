@@ -1,13 +1,12 @@
 services:
   master-stb:
-    build: .
+    image: ghcr.io/abcrd54/master-h:latest
     container_name: master-stb
     restart: unless-stopped
     network_mode: host
     environment:
       LISTEN_ADDR: ":8080"
       WEB_FILE: /opt/master-stb/index.html
-      DASHBOARD_TOKEN: "${DASHBOARD_TOKEN:-}"
     volumes:
       - ./web/index.html:/opt/master-stb/index.html:ro
       - adb-keys:/home/app/.android
@@ -17,5 +16,24 @@ services:
       - ALL
     mem_limit: 128m
 
+  remote-stb:
+    image: ghcr.io/abcrd54/master-h-remote:latest
+    container_name: remote-stb
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      WS_SCRCPY_WEB_PORT: "8000"
+      WS_SCRCPY_NO_BROWSER: "1"
+      DATA_ROOT: /data
+      DEPS_PATH: /data/dependencies
+    volumes:
+      - ./remote-config.json:/data/config.json:ro
+      - remote-data:/data
+      - adb-keys:/root/.android
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 512m
+
 volumes:
   adb-keys:
+  remote-data:

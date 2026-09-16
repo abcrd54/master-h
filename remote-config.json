@@ -1,0 +1,6 @@
+{
+  "webPort": 8000,
+  "firstRunComplete": true,
+  "autoUpdate": false,
+  "dependenciesPath": "/data/dependencies"
+}
