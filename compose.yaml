@@ -1,0 +1,21 @@
+services:
+  master-stb:
+    build: .
+    container_name: master-stb
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      LISTEN_ADDR: ":8080"
+      WEB_FILE: /opt/master-stb/index.html
+      DASHBOARD_TOKEN: "${DASHBOARD_TOKEN:-}"
+    volumes:
+      - ./web/index.html:/opt/master-stb/index.html:ro
+      - adb-keys:/home/app/.android
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    mem_limit: 128m
+
+volumes:
+  adb-keys:

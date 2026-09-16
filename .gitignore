@@ -1,0 +1,10 @@
+.env
+.gocache/
+.gopath/
+.telemetry/
+master-stb
+master-stb.exe
+
+# Legacy desktop and scrcpy assets are not part of the monitor deployment.
+QtScrcpy-win-x64-v3.7.0/
+.vendor-ws-scrcpy-web/
