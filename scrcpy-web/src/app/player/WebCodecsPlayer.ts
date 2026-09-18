@@ -428,12 +428,12 @@ export class WebCodecsPlayer extends BaseCanvasBasedPlayer {
         this.emit('input-video-resize', screenInfo);
         this.setScreenInfo(screenInfo);
         this.initCanvas(width, height);
-        if (scale !== 1) {
-            this.tag.style.transform = `scale(${scale.toFixed(4)})`;
-        } else {
-            this.tag.style.transform = '';
-        }
-        this.tag.style.transformOrigin = 'top left';
+        // Keep the video and transparent touch canvases in the same layout box.
+        // A CSS transform only shrinks the visible video, leaving the touch
+        // layer positioned from the original canvas dimensions.
+        this.tag.style.transform = '';
+        this.tag.style.width = `${w}px`;
+        this.tag.style.height = `${h}px`;
     }
 
     /** Legacy decode path — not used with v3.x demuxer. */
