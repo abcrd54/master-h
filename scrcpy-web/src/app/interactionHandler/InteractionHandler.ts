@@ -215,7 +215,10 @@ export abstract class InteractionHandler {
         const { width, height } = screenInfo.videoSize;
         const target: HTMLElement = event.target as HTMLElement;
         const rect = target.getBoundingClientRect();
-        let { clientWidth, clientHeight } = target;
+        // clientWidth/clientHeight ignore CSS transforms. Use the rendered
+        // rectangle so fullscreen/scaled canvases map clicks to device pixels.
+        let clientWidth = rect.width;
+        let clientHeight = rect.height;
         let touchX = event.clientX - rect.left;
         let touchY = event.clientY - rect.top;
         let invalid = false;
